@@ -2,7 +2,7 @@ import { useMemo, useRef, useState } from 'react'
 import { useCallback } from 'react'
 import ScaleContext from './ScaleContext'
 import { useEffect } from 'react'
-import debounce from 'lodash/debounce'
+import debounce from 'lodash-es/debounce'
 
 export type ReactResponsiveScaleProps = {
   /**
