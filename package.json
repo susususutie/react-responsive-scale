@@ -1,6 +1,6 @@
 {
   "name": "react-responsive-scale",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "description": "A React component for responsive scaling of data dashboards",
   "main": "dist/react-responsive-scale.cjs.js",
