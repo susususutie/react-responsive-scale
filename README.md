@@ -1,69 +1,85 @@
-# React + TypeScript + Vite
+# React Responsive Scale
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+一个用于数据大屏页面的 React 组件，能够确保大屏内容在任意比例的屏幕上保持指定的比例，并动态调整 `html` 的 `font-size`，用于 `rem` 布局。
 
-Currently, two official plugins are available:
+## 安装
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+pnpm add react-responsive-scale
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 使用方法
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### 基本用法
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```tsx
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import ResponsiveScale from 'react-responsive-scale';
+
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
+root.render(
+  <React.StrictMode>
+    <ResponsiveScale
+      rootValue={16} // 设计稿尺寸下的根组件 font-size
+      rootWidth={1920} // 设计稿宽度
+      rootHeight={1080} // 设计稿高度
+    >
+      <div style={{ width: '100%', height: '100%', color: '#fff', fontSize: '2rem', textAlign: 'center', lineHeight: '1080px' }}>
+        不管浏览器尺寸如何，内容区域都按指定宽高比显示
+      </div>
+    </ResponsiveScale>
+  </React.StrictMode>
+);
 ```
+
+### 参数说明
+
+| 参数名称       | 类型       | 描述                                                                 |
+|----------------|------------|----------------------------------------------------------------------|
+| `rootValue`    | `number`   | 设计稿尺寸下的根组件 `font-size`，用于 `rem` 布局。                  |
+| `rootWidth`    | `number`   | 设计稿宽度。                                                         |
+| `rootHeight`   | `number`   | 设计稿高度。                                                         |
+| `precision`    | `number`   | 计算精度，默认值为 `5`。                                             |
+| `wait`         | `number`   | 浏览器窗口尺寸变更后重新计算的 debounce 时间，默认值为 `300` 毫秒。   |
+| `backgroundImage` | `string`  | 全屏背景图的。                                                   |
+| `backgroundColor` | `string`  | 全屏背景底色。                                                       |
+
+### 获取尺寸参数和计算方法
+
+在大屏业务组件中，可以通过 `ResponsiveScale` 的 `context` 获取必要尺寸参数和尺寸计算方法。
+
+```tsx
+import React, { useContext } from 'react';
+import { ResponsiveScaleContext } from 'react-responsive-scale';
+
+const MyComponent: React.FC = () => {
+  const { calcPx, calcRem } = useContext(ResponsiveScaleContext);
+
+  return (
+    <div>
+      <p>设计稿尺寸 100px 转换为当前屏幕下的实际尺寸: {calcPx(100)}px</p>
+      <p>设计稿尺寸 100px 转换为 rem 尺寸: {calcRem(100)}rem</p>
+    </div>
+  );
+};
+
+export default MyComponent;
+```
+
+### 浏览器窗口宽高比大于设计稿
+
+- 大屏内容保持设计稿比例居中展示，左右两侧留空。
+
+### 浏览器窗口宽高比小于设计稿
+
+- 大屏内容保持设计稿比例居中展示，上下留白。
+
+## 注意事项
+
+- 确保在使用 `ResponsiveScale` 组件时，`rootValue`、`rootWidth` 和 `rootHeight` 参数正确设置，以匹配你的设计稿。
+- 如果需要自定义背景图或背景色，可以通过 `backgroundImage` 和 `backgroundColor` 参数设置。
+
+## 问题反馈
+
+如果在使用过程中遇到任何问题，欢迎提交 [Issue](https://github.com/your-repo/react-responsive-scale/issues) 或 [Pull Request](https://github.com/your-repo/react-responsive-scale/pulls)。
