@@ -13,11 +13,11 @@ pnpm add react-responsive-scale
 ### 基本用法
 
 ```tsx
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import ResponsiveScale from 'react-responsive-scale';
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import ResponsiveScale from 'react-responsive-scale'
 
-const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(
   <React.StrictMode>
     <ResponsiveScale
@@ -25,61 +25,53 @@ root.render(
       rootWidth={1920} // 设计稿宽度
       rootHeight={1080} // 设计稿高度
     >
-      <div style={{ width: '100%', height: '100%', color: '#fff', fontSize: '2rem', textAlign: 'center', lineHeight: '1080px' }}>
+      <div
+        style={{
+          width: '100%',
+          height: '100%',
+          color: '#fff',
+          fontSize: '2rem',
+          textAlign: 'center',
+          lineHeight: '1080px',
+        }}
+      >
         不管浏览器尺寸如何，内容区域都按指定宽高比显示
       </div>
     </ResponsiveScale>
   </React.StrictMode>
-);
+)
 ```
 
 ### 参数说明
 
-| 参数名称       | 类型       | 描述                                                                 |
-|----------------|------------|----------------------------------------------------------------------|
-| `rootValue`    | `number`   | 设计稿尺寸下的根组件 `font-size`，用于 `rem` 布局。                  |
-| `rootWidth`    | `number`   | 设计稿宽度。                                                         |
-| `rootHeight`   | `number`   | 设计稿高度。                                                         |
-| `precision`    | `number`   | 计算精度，默认值为 `5`。                                             |
-| `wait`         | `number`   | 浏览器窗口尺寸变更后重新计算的 debounce 时间，默认值为 `300` 毫秒。   |
-| `backgroundImage` | `string`  | 全屏背景图的。                                                   |
-| `backgroundColor` | `string`  | 全屏背景底色。                                                       |
+| 参数名称          | 类型     | 描述                                                                |
+| ----------------- | -------- | ------------------------------------------------------------------- |
+| `rootValue`       | `number` | 设计稿尺寸下的根组件 `font-size`，用于 `rem` 布局。                 |
+| `rootWidth`       | `number` | 设计稿宽度。                                                        |
+| `rootHeight`      | `number` | 设计稿高度。                                                        |
+| `precision`       | `number` | 计算精度，默认值为 `5`。                                            |
+| `wait`            | `number` | 浏览器窗口尺寸变更后重新计算的 debounce 时间，默认值为 `300` 毫秒。 |
+| `backgroundImage` | `string` | 全屏背景图的。                                                      |
+| `backgroundColor` | `string` | 全屏背景底色。                                                      |
 
 ### 获取尺寸参数和计算方法
 
 在大屏业务组件中，可以通过 `ResponsiveScale` 的 `context` 获取必要尺寸参数和尺寸计算方法。
 
 ```tsx
-import React, { useContext } from 'react';
-import { ResponsiveScaleContext } from 'react-responsive-scale';
+import React, { useContext } from 'react'
+import { ResponsiveScaleContext } from 'react-responsive-scale'
 
 const MyComponent: React.FC = () => {
-  const { calcPx, calcRem } = useContext(ResponsiveScaleContext);
+  const { calcPx, calcRem } = useContext(ResponsiveScaleContext)
 
   return (
     <div>
       <p>设计稿尺寸 100px 转换为当前屏幕下的实际尺寸: {calcPx(100)}px</p>
       <p>设计稿尺寸 100px 转换为 rem 尺寸: {calcRem(100)}rem</p>
     </div>
-  );
-};
+  )
+}
 
-export default MyComponent;
+export default MyComponent
 ```
-
-### 浏览器窗口宽高比大于设计稿
-
-- 大屏内容保持设计稿比例居中展示，左右两侧留空。
-
-### 浏览器窗口宽高比小于设计稿
-
-- 大屏内容保持设计稿比例居中展示，上下留白。
-
-## 注意事项
-
-- 确保在使用 `ResponsiveScale` 组件时，`rootValue`、`rootWidth` 和 `rootHeight` 参数正确设置，以匹配你的设计稿。
-- 如果需要自定义背景图或背景色，可以通过 `backgroundImage` 和 `backgroundColor` 参数设置。
-
-## 问题反馈
-
-如果在使用过程中遇到任何问题，欢迎提交 [Issue](https://github.com/your-repo/react-responsive-scale/issues) 或 [Pull Request](https://github.com/your-repo/react-responsive-scale/pulls)。

@@ -1,6 +1,6 @@
 {
   "name": "react-responsive-scale",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "type": "module",
   "description": "A React component for responsive scaling of data dashboards",
   "main": "dist/react-responsive-scale.cjs.js",
@@ -15,6 +15,25 @@
     "lint": "eslint .",
     "preview": "vite preview"
   },
+  "keywords": [
+    "react",
+    "responsive",
+    "scale",
+    "data",
+    "dashboard",
+    "rem",
+    "screen"
+  ],
+  "author": "sutie <susususutie@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/susususutie/react-responsive-scale.git"
+  },
+  "bugs": {
+    "url": "https://github.com/susususutie/react-responsive-scale/issues"
+  },
+  "homepage": "https://github.com/susususutie/react-responsive-scale#readme",
   "devDependencies": {
     "@eslint/js": "^9.29.0",
     "@types/lodash-es": "^4.17.12",
