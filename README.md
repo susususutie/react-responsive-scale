@@ -60,10 +60,10 @@ root.render(
 
 ```tsx
 import React, { useContext } from 'react'
-import { ResponsiveScaleContext } from 'react-responsive-scale'
+import { ScaleContext } from 'react-responsive-scale'
 
 const MyComponent: React.FC = () => {
-  const { calcPx, calcRem } = useContext(ResponsiveScaleContext)
+  const { calcPx, calcRem } = useContext(ScaleContext)
 
   return (
     <div>

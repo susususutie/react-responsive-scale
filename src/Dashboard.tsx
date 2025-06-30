@@ -1,5 +1,5 @@
 import { useContext, type CSSProperties } from 'react'
-import { ResponsiveScaleContext } from './ReactResponsiveScale'
+import { ScaleContext } from './ReactResponsiveScale'
 
 type DashboardProps = {
   changeBackgroundColor: (color: CSSProperties['backgroundColor']) => void
@@ -8,7 +8,7 @@ type DashboardProps = {
 export default function Dashboard(props: DashboardProps) {
   const { changeBackgroundColor } = props
 
-  const rs = useContext(ResponsiveScaleContext)
+  const rs = useContext(ScaleContext)
 
   return (
     <div style={{ width: '100%', height: '100%', backgroundColor: '#fff' }}>
