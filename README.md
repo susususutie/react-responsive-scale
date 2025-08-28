@@ -15,12 +15,12 @@ pnpm add react-responsive-scale
 ```tsx
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import ResponsiveScale from 'react-responsive-scale'
+import { ReactResponsiveScale } from 'react-responsive-scale'
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(
   <React.StrictMode>
-    <ResponsiveScale
+    <ReactResponsiveScale
       rootValue={16} // 设计稿尺寸下的根组件 font-size
       rootWidth={1920} // 设计稿宽度
       rootHeight={1080} // 设计稿高度
@@ -37,7 +37,7 @@ root.render(
       >
         不管浏览器尺寸如何，内容区域都按指定宽高比显示
       </div>
-    </ResponsiveScale>
+    </ReactResponsiveScale>
   </React.StrictMode>
 )
 ```

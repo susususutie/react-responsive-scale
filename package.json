@@ -1,19 +1,23 @@
 {
   "name": "react-responsive-scale",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "type": "module",
   "description": "A React component for responsive scaling of data dashboards",
-  "main": "dist/react-responsive-scale.es.js",
-  "module": "dist/react-responsive-scale.es.js",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "sideEffects": false,
   "files": [
-    "dist"
+    "dist",
+    "README.md"
   ],
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "prepublishOnly": "pnpm run build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "prepublishOnly": "pnpm run build-pkg",
+    "build-pkg": "tsc -b --noEmit && tsup ./src/ReactResponsiveScale/index.ts --clean --sourcemap --dts --format esm --tsconfig ./tsconfig.app.json"
   },
   "keywords": [
     "react",
@@ -46,6 +50,7 @@
     "globals": "^16.2.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "tsup": "^8.5.0",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.34.1",
     "vite": "^7.0.0"

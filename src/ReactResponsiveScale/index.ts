@@ -1,7 +1,6 @@
-export { default as ScaleContext, type ScaleContextType } from './ScaleContext'
-export {
-  default as ResponsiveScale,
-  type ReactResponsiveScaleProps as ResponsiveScaleProps,
-} from './ReactResponsiveScale'
+import { default as ScaleContext, type ScaleContextType } from './ScaleContext'
+import { default as ReactResponsiveScale, type ReactResponsiveScaleProps } from './ReactResponsiveScale'
 
-export { default } from './ReactResponsiveScale'
+export default ReactResponsiveScale
+export { ReactResponsiveScale, ScaleContext }
+export type { ReactResponsiveScaleProps, ScaleContextType }
