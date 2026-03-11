@@ -1,4 +1,7 @@
 import { describe, it, expect } from 'vitest'
+import { render, screen } from '@testing-library/react'
+import React from 'react'
+import ScaleContext, { ScaleContextProvider, ScaleContextConsumer } from '../ReactResponsiveScale/ScaleContext'
 
 // ============ ScaleContext 默认值测试 ============
 describe('ScaleContext', () => {
@@ -32,6 +35,28 @@ describe('ScaleContext', () => {
     expect(ctx.calcWidth(50)).toBe(0)
     expect(ctx.calcHeight(50)).toBe(0)
     expect(ctx.calcPx(100)).toBe(0)
+  })
+})
+
+// ============ ScaleContext Provider/Consumer 测试 ============
+describe('ScaleContext Provider & Consumer', () => {
+  it('should have ScaleContextProvider and ScaleContextConsumer exported', () => {
+    expect(ScaleContextProvider).toBeDefined()
+    expect(ScaleContextConsumer).toBeDefined()
+    expect(ScaleContext).toBeDefined()
+  })
+
+  it('should have default context value', () => {
+    const defaultValue = {
+      rootWidth: 0,
+      rootHeight: 0,
+      rootValue: 16,
+      calcWidth: () => 0,
+      calcHeight: () => 0,
+      calcPx: () => 0,
+      calcRem: () => '0rem' as const,
+    }
+    expect(defaultValue.rootWidth).toBe(0)
   })
 })
 
@@ -107,11 +132,8 @@ describe('计算函数', () => {
         return Math.round(((px * rootFontSize) / rootValue) * 100) / 100
       }
 
-      // 设计稿 100px，在 rootFontSize=8 时实际为 50px
       expect(calcPx(100, 8, 16)).toBe(50)
-      // 设计稿 16px，在 rootFontSize=16 时实际为 16px
       expect(calcPx(16, 16, 16)).toBe(16)
-      // 设计稿 32px，在 rootFontSize=8 时实际为 16px
       expect(calcPx(32, 8, 16)).toBe(16)
     })
 
@@ -145,11 +167,9 @@ describe('缩放算法', () => {
     let height = 0
 
     if (wrapperWPH > aspectRatio) {
-      // 外层更宽，以高度为基准
       height = wrapperHeight
       width = Math.round((height * aspectRatio) * 10 ** precision) / 10 ** precision
     } else if (wrapperWPH < aspectRatio) {
-      // 外层更高，以宽度为基准
       width = wrapperWidth
       height = Math.round((width / aspectRatio) * 10 ** precision) / 10 ** precision
     } else {
@@ -164,7 +184,6 @@ describe('缩放算法', () => {
 
   describe('保持设计比例 (16:9)', () => {
     it('should fit height when wrapper is wider', () => {
-      // 1920x1080 设计稿，容器 1920x540 (更宽)
       const result = computeSize(1920, 540, 1920, 1080)
       expect(result.width).toBe(960)
       expect(result.height).toBe(540)
@@ -172,7 +191,6 @@ describe('缩放算法', () => {
     })
 
     it('should fit width when wrapper is taller', () => {
-      // 1920x1080 设计稿，容器 960x1080 (更高)
       const result = computeSize(960, 1080, 1920, 1080)
       expect(result.width).toBe(960)
       expect(result.height).toBe(540)
@@ -180,7 +198,6 @@ describe('缩放算法', () => {
     })
 
     it('should use full wrapper when aspect ratio matches', () => {
-      // 1920x1080 设计稿，容器也是 16:9
       const result = computeSize(1920, 1080, 1920, 1080)
       expect(result.width).toBe(1920)
       expect(result.height).toBe(1080)
@@ -213,10 +230,6 @@ describe('缩放算法', () => {
 
     it('should handle very small dimensions', () => {
       const result = computeSize(1, 1, 1920, 1080)
-      // 1x1 容器，design 1920x1080 (16:9)
-      // wrapperWPH = 1, aspectRatio = 1.777
-      // wrapperWPH < aspectRatio，所以以宽度为基准
-      // height = 1 / 1.777 = 0.5625
       expect(result.width).toBe(1)
       expect(result.height).toBe(0.5625)
     })
