@@ -81,8 +81,6 @@ export default function ReactResponsiveScale(props: ReactResponsiveScaleProps) {
   // 参数校验
   validateProps(props)
 
-  // TODO 参数校验
-
   const rootRef = useRef<HTMLDivElement>(null)
   const [rootSize, setRootSize] = useState<{ width: number; height: number; rootFontSize: number } | null>(null)
   useEffect(() => {

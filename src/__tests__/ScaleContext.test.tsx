@@ -1,6 +1,4 @@
 import { describe, it, expect } from 'vitest'
-import { render, screen } from '@testing-library/react'
-import React from 'react'
 import ScaleContext, { ScaleContextProvider, ScaleContextConsumer } from '../ReactResponsiveScale/ScaleContext'
 
 // ============ ScaleContext 默认值测试 ============
