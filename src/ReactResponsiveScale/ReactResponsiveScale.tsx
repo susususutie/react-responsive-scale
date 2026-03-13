@@ -2,29 +2,6 @@ import { useMemo, useRef, useState, useCallback, useEffect } from 'react'
 import ScaleContext from './ScaleContext'
 import debounce from 'lodash-es/debounce'
 
-/**
- * 参数校验
- */
-const validateProps = (props: ReactResponsiveScaleProps): void => {
-  const { rootValue, rootWidth, rootHeight, precision, wait } = props
-  
-  if (rootValue !== undefined && rootValue <= 0) {
-    console.warn('[ReactResponsiveScale] rootValue must be greater than 0')
-  }
-  if (rootWidth !== undefined && rootWidth <= 0) {
-    console.warn('[ReactResponsiveScale] rootWidth must be greater than 0')
-  }
-  if (rootHeight !== undefined && rootHeight <= 0) {
-    console.warn('[ReactResponsiveScale] rootHeight must be greater than 0')
-  }
-  if (precision !== undefined && (precision < 0 || precision > 10)) {
-    console.warn('[ReactResponsiveScale] precision should be between 0 and 10')
-  }
-  if (wait !== undefined && wait < 0) {
-    console.warn('[ReactResponsiveScale] wait must be greater than or equal to 0')
-  }
-}
-
 export type ReactResponsiveScaleProps = {
   /**
    * html标签字体大小
@@ -78,8 +55,26 @@ export default function ReactResponsiveScale(props: ReactResponsiveScaleProps) {
     children,
   } = props
 
-  // 参数校验
-  validateProps(props)
+  // 参数校验 (仅在挂载时执行一次)
+  useEffect(() => {
+    // validateProps 只在组件挂载时执行一次，用于警告用户错误的配置
+    const { rootValue, rootWidth, rootHeight, precision, wait } = props
+    if (rootValue !== undefined && rootValue <= 0) {
+      console.warn('[ReactResponsiveScale] rootValue must be greater than 0')
+    }
+    if (rootWidth !== undefined && rootWidth <= 0) {
+      console.warn('[ReactResponsiveScale] rootWidth must be greater than 0')
+    }
+    if (rootHeight !== undefined && rootHeight <= 0) {
+      console.warn('[ReactResponsiveScale] rootHeight must be greater than 0')
+    }
+    if (precision !== undefined && (precision < 0 || precision > 10)) {
+      console.warn('[ReactResponsiveScale] precision should be between 0 and 10')
+    }
+    if (wait !== undefined && wait < 0) {
+      console.warn('[ReactResponsiveScale] wait must be greater than or equal to 0')
+    }
+  }, []) // 故意只在挂载时执行一次
 
   const rootRef = useRef<HTMLDivElement>(null)
   const [rootSize, setRootSize] = useState<{ width: number; height: number; rootFontSize: number } | null>(null)
@@ -118,14 +113,12 @@ export default function ReactResponsiveScale(props: ReactResponsiveScaleProps) {
       }
     }
     const { clientWidth, clientHeight } = rootRef.current!
-    // console.log('first calculate', clientWidth, clientHeight)
     const size = computeSize({ width: clientWidth, height: clientHeight })
     setRootSize(size)
 
     const onResize = debounce(
       () => {
         const { clientWidth, clientHeight } = rootRef.current!
-        // console.log('onResize', clientWidth, clientHeight)
         const size = computeSize({ width: clientWidth, height: clientHeight })
         setRootSize(size)
       },
@@ -193,8 +186,6 @@ export default function ReactResponsiveScale(props: ReactResponsiveScaleProps) {
     const fontSize = rootSize?.rootFontSize ?? rootValue
     document.documentElement.style.fontSize = fontSize + 'px'
   }, [rootValue, rootSize?.rootFontSize])
-
-  // console.log('render', rootSize?.width, rootSize?.height, rootSize?.rootFontSize)
 
   return (
     <ScaleContext.Provider value={ScaleContextValue}>
