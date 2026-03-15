@@ -2,6 +2,11 @@ import { useMemo, useRef, useState, useCallback, useEffect } from 'react'
 import ScaleContext from './ScaleContext'
 import debounce from 'lodash-es/debounce'
 
+// 精度计算工具函数
+const roundPrecision = (value: number, precision: number): number => {
+  return Math.round(value * 10 ** precision) / 10 ** precision
+}
+
 export type ReactResponsiveScaleProps = {
   /**
    * html标签字体大小
@@ -81,35 +86,33 @@ export default function ReactResponsiveScale(props: ReactResponsiveScaleProps) {
   useEffect(() => {
     const computeSize = (size: { width: number; height: number }) => {
       if (!size || !size.width || !size.height) {
-        return { width: 0, height: 0, rootFontSize: Math.round(rootValue * 10 ** precision) / 10 ** precision }
+        return { width: 0, height: 0, rootFontSize: roundPrecision(rootValue, precision) }
       }
       // 目标宽高比
       const aspectRatio = rootWidth / rootHeight
       let width = 0
       let height = 0
-      if (size && size.width && size.height) {
-        const wrapperWPH = size.width / size.height
-        // 1. 外层宽高比更大, 外层更宽, 以高度为基准, 左右留白
-        if (wrapperWPH > aspectRatio) {
-          height = size.height
-          width = Math.round(height * aspectRatio * 10 ** precision) / 10 ** precision
-        }
-        // 2. 外层宽高比更小, 外层更高, 以宽度为基准, 上下留白
-        else if (wrapperWPH < aspectRatio) {
-          width = size.width
-          height = Math.round((width / aspectRatio) * 10 ** precision) / 10 ** precision
-        }
-        // 3. 宽高比相同, 以外层尺寸显示
-        else {
-          width = size.width
-          height = size.height
-        }
+      const wrapperWPH = size.width / size.height
+      // 1. 外层宽高比更大, 外层更宽, 以高度为基准, 左右留白
+      if (wrapperWPH > aspectRatio) {
+        height = size.height
+        width = roundPrecision(height * aspectRatio, precision)
+      }
+      // 2. 外层宽高比更小, 外层更高, 以宽度为基准, 上下留白
+      else if (wrapperWPH < aspectRatio) {
+        width = size.width
+        height = roundPrecision(width / aspectRatio, precision)
+      }
+      // 3. 宽高比相同, 以外层尺寸显示
+      else {
+        width = size.width
+        height = size.height
       }
 
       return {
         width,
         height,
-        rootFontSize: Math.round((width / (rootWidth / rootValue)) * 10 ** precision) / 10 ** precision,
+        rootFontSize: roundPrecision(width / (rootWidth / rootValue), precision),
       }
     }
     const { clientWidth, clientHeight } = rootRef.current!
@@ -137,7 +140,7 @@ export default function ReactResponsiveScale(props: ReactResponsiveScaleProps) {
       if (typeof rootSize?.width !== 'number' || typeof percent !== 'number' || percent < 0 || percent > 100) {
         return 0
       }
-      return Math.round(rootSize.width * (percent / 100) * 10 ** precision) / 10 ** precision
+      return roundPrecision(rootSize.width * (percent / 100), precision)
     },
     [rootSize?.width, precision]
   )
@@ -146,7 +149,7 @@ export default function ReactResponsiveScale(props: ReactResponsiveScaleProps) {
       if (typeof rootSize?.height !== 'number' || typeof percent !== 'number' || percent < 0 || percent > 100) {
         return 0
       }
-      return Math.round(rootSize.height * (percent / 100) * 10 ** precision) / 10 ** precision
+      return roundPrecision(rootSize.height * (percent / 100), precision)
     },
     [rootSize?.height, precision]
   )
@@ -155,7 +158,7 @@ export default function ReactResponsiveScale(props: ReactResponsiveScaleProps) {
       if (typeof rootSize?.rootFontSize !== 'number' || typeof px !== 'number') {
         return px
       }
-      return Math.round(((px * rootSize.rootFontSize) / rootValue) * 10 ** precision) / 10 ** precision
+      return roundPrecision((px * rootSize.rootFontSize) / rootValue, precision)
     },
     [rootSize?.rootFontSize, rootValue, precision]
   )
@@ -164,7 +167,7 @@ export default function ReactResponsiveScale(props: ReactResponsiveScaleProps) {
       if (typeof px !== 'number') {
         return '0rem'
       }
-      return (Math.round((px / rootValue) * 10 ** precision) / 10 ** precision + 'rem') as `${number}rem`
+      return (roundPrecision(px / rootValue, precision) + 'rem') as `${number}rem`
     },
     [rootValue, precision]
   )
