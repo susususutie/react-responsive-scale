@@ -18,7 +18,7 @@ export default function Dashboard(props: DashboardProps) {
         可以更改全局背景色和背景图片，以搭配居中区域不同的色彩风格
         <button
           onClick={() => {
-            const randomColor = `#${Math.floor(Math.random() * 0xffffff).toString(16)}`
+            const randomColor = `#${Math.floor(Math.random() * 0xffffff).toString(16).padStart(6, '0')}`
             changeBackgroundColor(randomColor)
           }}
         >
