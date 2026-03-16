@@ -127,7 +127,6 @@ export default function ReactResponsiveScale(props: ReactResponsiveScaleProps) {
         setRootSize(size)
       },
       wait
-      // { leading: false, trailing: true }
     )
     window.addEventListener('resize', onResize, true)
 
