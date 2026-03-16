@@ -61,6 +61,7 @@ export default function ReactResponsiveScale(props: ReactResponsiveScaleProps) {
   } = props
 
   // 参数校验 (仅在挂载时执行一次)
+  // 故意不使用 props 作为依赖，因为只需要在挂载时校验一次
   useEffect(() => {
     // validateProps 只在组件挂载时执行一次，用于警告用户错误的配置
     const { rootValue, rootWidth, rootHeight, precision, wait } = props
