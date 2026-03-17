@@ -190,44 +190,57 @@ export default function ReactResponsiveScale(props: ReactResponsiveScaleProps) {
     document.documentElement.style.fontSize = fontSize + 'px'
   }, [rootValue, rootSize?.rootFontSize])
 
+  // 主容器样式
+  const containerStyle: React.CSSProperties = useMemo(
+    () => ({
+      width: '100vw',
+      height: '100vh',
+      position: 'fixed',
+      left: 0,
+      top: 0,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      overflow: 'hidden',
+      backgroundColor,
+      ...style,
+    }),
+    [backgroundColor, style]
+  )
+
+  // 背景图样式
+  const backgroundStyle: React.CSSProperties = useMemo(
+    () => ({
+      position: 'absolute',
+      width: '100%',
+      height: '100%',
+      top: 0,
+      left: 0,
+      backgroundImage: backgroundImage!,
+      backgroundSize: 'cover',
+      backgroundRepeat: 'no-repeat',
+      backgroundPosition: 'center',
+      filter: 'blur(10px)',
+      zIndex: -1,
+    }),
+    [backgroundImage]
+  )
+
+  // 内容区域样式
+  const contentStyle: React.CSSProperties = useMemo(
+    () => ({
+      width: rootSize?.width,
+      height: rootSize?.height,
+      position: 'relative',
+    }),
+    [rootSize?.width, rootSize?.height]
+  )
+
   return (
     <ScaleContext.Provider value={ScaleContextValue}>
-      <div
-        ref={rootRef}
-        style={{
-          width: '100vw',
-          height: '100vh',
-          position: 'fixed',
-          left: 0,
-          top: 0,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          overflow: 'hidden',
-          backgroundColor: backgroundColor,
-          ...style,
-        }}
-      >
-        {backgroundImage ? (
-          <div
-            style={{
-              position: 'absolute',
-              width: '100%',
-              height: '100%',
-              top: 0,
-              left: 0,
-              backgroundImage: backgroundImage,
-              backgroundSize: 'cover',
-              backgroundRepeat: 'no-repeat',
-              backgroundPosition: 'center',
-              filter: 'blur(10px)',
-              zIndex: -1,
-            }}
-          ></div>
-        ) : null}
-        <div style={{ width: rootSize?.width, height: rootSize?.height, position: 'relative' }}>
-          {rootSize ? children : null}
-        </div>
+      <div ref={rootRef} style={containerStyle}>
+        {backgroundImage && <div style={backgroundStyle}></div>}
+        <div style={contentStyle}>{rootSize ? children : null}</div>
       </div>
     </ScaleContext.Provider>
   )
