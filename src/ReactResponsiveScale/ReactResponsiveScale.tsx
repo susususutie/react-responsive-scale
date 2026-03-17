@@ -80,6 +80,7 @@ export default function ReactResponsiveScale(props: ReactResponsiveScaleProps) {
     if (wait !== undefined && wait < 0) {
       console.warn('[ReactResponsiveScale] wait must be greater than or equal to 0')
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []) // 故意只在挂载时执行一次
 
   const rootRef = useRef<HTMLDivElement>(null)
