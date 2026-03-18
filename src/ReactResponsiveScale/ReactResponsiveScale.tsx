@@ -85,6 +85,14 @@ export default function ReactResponsiveScale(props: ReactResponsiveScaleProps) {
 
   const rootRef = useRef<HTMLDivElement>(null)
   const [rootSize, setRootSize] = useState<{ width: number; height: number; rootFontSize: number } | null>(null)
+  
+  // 获取容器尺寸的工具函数
+  const getContainerSize = useCallback(() => {
+    if (!rootRef.current) return null
+    const { clientWidth, clientHeight } = rootRef.current
+    return { width: clientWidth, height: clientHeight }
+  }, [])
+  
   useEffect(() => {
     const computeSize = (size: { width: number; height: number }) => {
       if (!size || !size.width || !size.height) {
@@ -117,14 +125,16 @@ export default function ReactResponsiveScale(props: ReactResponsiveScaleProps) {
         rootFontSize: roundPrecision(width / (rootWidth / rootValue), precision),
       }
     }
-    const { clientWidth, clientHeight } = rootRef.current!
-    const size = computeSize({ width: clientWidth, height: clientHeight })
+    const initialSize = getContainerSize()
+    if (!initialSize) return
+    const size = computeSize(initialSize)
     setRootSize(size)
 
     const onResize = debounce(
       () => {
-        const { clientWidth, clientHeight } = rootRef.current!
-        const size = computeSize({ width: clientWidth, height: clientHeight })
+        const currentSize = getContainerSize()
+        if (!currentSize) return
+        const size = computeSize(currentSize)
         setRootSize(size)
       },
       wait
@@ -134,7 +144,7 @@ export default function ReactResponsiveScale(props: ReactResponsiveScaleProps) {
     return () => {
       window.removeEventListener('resize', onResize, true)
     }
-  }, [rootValue, precision, rootWidth, rootHeight, wait])
+  }, [getContainerSize, rootValue, precision, rootWidth, rootHeight, wait])
 
   const calcWidth = useCallback(
     (percent: number) => {

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import ScaleContext, { ScaleContextProvider, ScaleContextConsumer } from '../ReactResponsiveScale/ScaleContext'
+import ScaleContext, { ScaleContextProvider } from '../ReactResponsiveScale/ScaleContext'
 
 // ============ ScaleContext 默认值测试 ============
 describe('ScaleContext', () => {
@@ -38,9 +38,8 @@ describe('ScaleContext', () => {
 
 // ============ ScaleContext Provider/Consumer 测试 ============
 describe('ScaleContext Provider & Consumer', () => {
-  it('should have ScaleContextProvider and ScaleContextConsumer exported', () => {
+  it('should have ScaleContextProvider exported', () => {
     expect(ScaleContextProvider).toBeDefined()
-    expect(ScaleContextConsumer).toBeDefined()
     expect(ScaleContext).toBeDefined()
   })
 

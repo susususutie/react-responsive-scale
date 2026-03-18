@@ -31,6 +31,5 @@ const defaultScaleContext: ScaleContextType = {
 const ScaleContext = createContext<ScaleContextType>(defaultScaleContext)
 
 export const ScaleContextProvider = ScaleContext.Provider
-export const ScaleContextConsumer = ScaleContext.Consumer
 
 export default ScaleContext
